@@ -60,11 +60,6 @@
     </div>
 </template>
 <script>
-import $ from 'jQuery'
-import 'bootstrap/dist/css/bootstrap.min.css'
-$(document).ready(function () {
-  // $('#example').DataTable()
-})
 export default {
   created () {
     this.$http.get('/api/movies')

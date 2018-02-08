@@ -189,7 +189,7 @@ router.post('/', function (req, res, next) {
             }
             //DB와 비교
             
-            conn.query('SELECT name,number,tel from over', function (error, results) {
+            conn.query('SELECT name,number,tel from `over`', function (error, results) {
               let arr = [];
               for (i = 0; i < results.length; i++) {
                 for (j = 0; j < A_values.length; j++) {                        
@@ -240,35 +240,36 @@ router.post('/', function (req, res, next) {
                 workbook.toFileAsync(filePath+"out.xlsx");
                 console.log('done!')
               });
+              if (data.checked_work == 3) {
+                for( let i = 0 ; i < A_values.length; i++ ) {
+                  
+                  for (let j = 0; j < 12; j++) {
+                    if(A_values[i][j] == undefined) A_values[i][j] = "";
+                  }
 
-              for( let i = 0 ; i < A_values.length; i++ ) {
-                
-                for (let j = 0; j < 12; j++) {
-                  if(A_values[i][j] == undefined) A_values[i][j] = "";
+                  let sql_value = '("'+
+                  A_values[i][12] +
+                  '","'+A_values[i][0]+
+                  '","'+A_values[i][1]+
+                  '","'+A_values[i][2]+
+                  '","'+A_values[i][3]+
+                  '","'+A_values[i][4]+
+                  '","'+A_values[i][5]+
+                  '","'+A_values[i][6]+
+                  '","'+A_values[i][7]+
+                  '","'+A_values[i][8]+
+                  '","'+A_values[i][9]+
+                  '","'+A_values[i][10]+
+                  '","'+A_values[i][11]+
+                  '")';
+                  conn.query(
+                    'INSERT INTO `over` (class, name, number, op1, op2, op3, tel, mail, cal, op4, op5, op6, color) values '+ sql_value,
+
+                    function (error, results, fields) {
+                      if (error) throw error;
+                      // Neat!
+                  });
                 }
-
-                let sql_value = '("'+
-                A_values[i][12] +
-                '","'+A_values[i][0]+
-                '","'+A_values[i][1]+
-                '","'+A_values[i][2]+
-                '","'+A_values[i][3]+
-                '","'+A_values[i][4]+
-                '","'+A_values[i][5]+
-                '","'+A_values[i][6]+
-                '","'+A_values[i][7]+
-                '","'+A_values[i][8]+
-                '","'+A_values[i][9]+
-                '","'+A_values[i][10]+
-                '","'+A_values[i][11]+
-                '")';
-                conn.query(
-                  'INSERT INTO over (class, name, number, op1, op2, op3, tel, mail, cal, op4, op5, op6, color) values '+ sql_value,
-
-                  function (error, results, fields) {
-                    if (error) throw error;
-                    // Neat!
-                });
               }
               return res.send(A_values);
                 
@@ -308,7 +309,7 @@ router.post('/up', function (req, res, next) {
 });
 
 router.get('/view', function (req, res, next) {
-  conn.query('SELECT * from over', function (error, results, fields) {
+  conn.query('SELECT * from `over`', function (error, results, fields) {
     if (error) throw error;
     res.send(results);
   });
