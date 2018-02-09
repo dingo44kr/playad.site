@@ -41,12 +41,12 @@ export default {
         },
         {
           label: '사업자번호',
-          field: 'number'
+          field: 'number',
+          filterable: true
         },
         {
           label: '옵션1',
-          field: 'op1',
-          filterable: true
+          field: 'op1'
         },
         {
           label: '옵션2',

@@ -28,7 +28,7 @@ router.get('/', function (req, res, next) {
     Afile: '티몬직접수집DB(A파일).xlsx',
     Bfile: '통판수집DB(A파일).xlsx',
     Cfile: '엔비스타DB(A파일).xlsx',
-    file: 'out.xlsx',
+    file: null,
     fileName: 'out.xlsx'
   };
   res.send(data)
@@ -223,23 +223,8 @@ router.post('/', function (req, res, next) {
               if (data.checked_work == 2) {
                 A_values = arr;
               }              
+
               
-              var data_ob = [];
-              console.log(A_values.length);
-
-
-              XlsxPopulate.fromFileAsync(filePath+'tle.xlsx')
-              .then(workbook => {
-                var r = workbook.sheet(0).range("A2:K" + A_values.length+1).value(A_values);
-                for( let i = 0 ; i < A_values.length ; i++) {
-                  if(A_values[i][11] != '') {
-                    workbook.sheet(0).range('A'+(i+2)+':K'+(i+2)).style("fill", { type: 'solid', color: { rgb: A_values[i][11] }
-                  })
-                  }
-                }
-                workbook.toFileAsync(filePath+"out.xlsx");
-                console.log('done!')
-              });
               if (data.checked_work == 3) {
                 for( let i = 0 ; i < A_values.length; i++ ) {
                   
@@ -271,8 +256,20 @@ router.post('/', function (req, res, next) {
                   });
                 }
               }
-              return res.send(A_values);
-                
+
+              XlsxPopulate.fromFileAsync(filePath+'tle.xlsx')
+              .then(workbook => {
+                var r = workbook.sheet(0).range("A2:K" + A_values.length+1).value(A_values);
+                for( let i = 0 ; i < A_values.length ; i++) {
+                  if(A_values[i][11] != '') {
+                    workbook.sheet(0).range('A'+(i+2)+':K'+(i+2)).style("fill", { type: 'solid', color: { rgb: A_values[i][11] }
+                  })
+                  }
+                }
+                workbook.toFileAsync(filePath+"out.xlsx");
+                console.log('done!')
+                return res.send("file");
+              });
             })
             // if (data.checked_work == 1) {
             //   for (i = 0; i < B_values.length; i++) {

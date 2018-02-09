@@ -1,12 +1,6 @@
 <template>
   <div>
         <table class="from-table">
-          <tr>
-            <td>
-              <input v-model="sql">
-              <button @click="test()">Go Test</button>
-            </td>
-          </tr>
             <tr>
                 <td>
                     티몬 <input id="A" type="file" name="A" @change="changeFileA($event)" /> <br />
@@ -44,9 +38,14 @@
                 </td>
                 <td v-else>1번, 2번파일을 업로드 해주세요!</td>
             </tr>
-            <tr v-if="file">
+            <tr v-if="value.file=='file'">
                 <td>
                   <button @click="result()"> 다운로드 </button>
+                </td>
+            </tr>
+            <tr v-if="value.file=='실행중'">
+                <td>
+                  실행중
                 </td>
             </tr>
             <tr>
@@ -70,7 +69,6 @@ export default {
   name: 'hello',
   data () {
     return {
-      sql: '',
       value: {},
       file: [],
       file_data: ''
@@ -78,20 +76,13 @@ export default {
   },
   methods: {
     sendData: function () {
-      this.value.file = null
+      this.value.file = '실행중'
       this.$http.post('/api/movies', {
         data: this.value
       })
       .then((response) => {
-        this.file = response.data
+        this.value.file = response.data
       })
-    },
-    test: function () {
-      this.$http.post('/api/movies/test', {
-        sql: this.sql,
-        hi: 'hihi'
-      }
-      )
     },
     changeFileA: function (event) {
       this.value.Afile = event.target.files[0].name
