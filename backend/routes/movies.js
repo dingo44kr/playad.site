@@ -25,9 +25,9 @@ router.get('/', function (req, res, next) {
     checked_2: true,
     checked_3: true,
     checked_work: 3,
-    Afile: '티몬직접수집DB(A파일).xlsx',
-    Bfile: '통판수집DB(A파일).xlsx',
-    Cfile: '엔비스타DB(A파일).xlsx',
+    Afile: 'tle.xlsx',
+    Bfile: 'tle.xlsx',
+    Cfile: 'tle.xlsx',
     file: null,
     fileName: 'out.xlsx'
   };
@@ -131,9 +131,9 @@ router.post('/', function (req, res, next) {
             let R1, R2, R3;
             var overlap = 0;
             let D1, D2, D3;
-            D1 = Boolean(typeof (data.checked_1) != 'undefined');
-            D2 = Boolean(typeof (data.checked_2) != 'undefined');
-            D3 = Boolean(typeof (data.checked_3) != 'undefined');
+            D1 = Boolean(data.checked_1 == true);
+            D2 = Boolean(data.checked_2 == true);
+            D3 = Boolean(data.checked_3 == true);
 
             for (i = 0; i < A_values.length ; i++) {
               overlap = 0;
@@ -158,6 +158,11 @@ router.post('/', function (req, res, next) {
                 B_values.splice(j, 1);
               }
             }
+
+            for(i = 0 ; i < B_values.length ; i++) {
+              A_values.push(B_values[i])
+            }
+
             for (i = 0; i < A_values.length ; i++) {
               overlap = 0;
               for (j = 0; j < C_values.length; j++) {
@@ -181,9 +186,7 @@ router.post('/', function (req, res, next) {
                 C_values.splice(0, 1);
               }
             }
-            for(i = 0 ; i < B_values.length ; i++) {
-              A_values.push(B_values[i])
-            }
+
             for(i = 0 ; i < C_values.length ; i++) {
               A_values.push(C_values[i])
             }
